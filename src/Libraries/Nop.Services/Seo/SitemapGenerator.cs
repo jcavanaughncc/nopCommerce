@@ -412,6 +412,7 @@ namespace Nop.Services.Seo
                 writer.WriteStartElement("sitemapindex");
                 writer.WriteAttributeString("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
                 writer.WriteAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                writer.WriteAttributeString("xmlns:xhtml", "http://www.w3.org/1999/xhtml");
                 writer.WriteAttributeString("xsi:schemaLocation", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
 
                 //write URLs of all available sitemaps
@@ -445,14 +446,13 @@ namespace Nop.Services.Seo
                 writer.WriteStartElement("urlset");
                 writer.WriteAttributeString("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
                 writer.WriteAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                writer.WriteAttributeString("xmlns:xhtml", "http://www.w3.org/1999/xhtml");
                 writer.WriteAttributeString("xsi:schemaLocation", "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
 
                 //write URLs from list to the sitemap
                 foreach (var localizedUrls in sitemapUrls)
                 {
-                    var localizedUrlsHash = new HashSet<SitemapUrl>(localizedUrls);
-
-                    foreach (var url in localizedUrlsHash)
+                    foreach (var url in localizedUrls)
                     {
                         writer.WriteStartElement("url");
 
@@ -460,7 +460,7 @@ namespace Nop.Services.Seo
                         writer.WriteElementString("loc", loc);
 
                         //Write all languages except current language
-                        foreach (var alternate in localizedUrlsHash.Except(new List<SitemapUrl> { url }))
+                        foreach (var alternate in localizedUrls)
                         {
                             var altLoc = XmlHelper.XmlEncode(alternate.Location);
                             var altLocPath = new Uri(XmlHelper.XmlEncode(altLoc)).PathAndQuery.ToString();
